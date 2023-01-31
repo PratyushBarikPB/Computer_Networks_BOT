@@ -1,0 +1,15 @@
+1) ifconfig:  ifconfig is interface configuration. It is used to change and view the network interface.
+2) ping:  ping (Packet Internet Groper) command is used to check the network connectivity between host and server or two hosts.
+3) traceroute: It is a network analysis tool that can be used to know the path a packet goes through.
+4) netstat: The netstat or network statistics command generates displays that show network status and protocol statistics.
+5) nslookup: The nslookup or Name Server Lookup is a command used for getting information from the DNS server.
+6) dig: The dig(domain information groper) is used to gather DNS information.
+7) ps: The ps(process status) is used to display a list of our processes that are currently running and obtain additional information about those processes.
+8) passwd: The passwd command is used to change the password of the user.
+9) top: This command is used to show the processes.
+10) man: This command is used to display the user manual of any command that we can run on the terminal.
+11) ls, ls-l, ls-a, ls-al: The ls(list) command is used in listing contents inside a directory, ls -l option displays the contents of the current directory in a long
+                           listing format, one per line,ls-a will list all files including hidden files.
+12) cwd, pwd: The cwd command is issued to change the client's current working directory to the path specified with the command and the pwd command writes to standard output of our current directory.
+13) cd.: The cd command is used to change the current working directory or to enter any directory.
+14) mkdir,rmdir: The command mkdir is used to create a directory and rmdir command is used to remove or delete a directory.
