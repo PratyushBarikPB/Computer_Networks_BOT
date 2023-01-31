@@ -1,0 +1,79 @@
+// SERVER 
+
+#include <stdio.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+int main(){
+    int sd,sd2,nsd,client,sport=6000,len;
+    sd=socket(AF_INET,SOCK_STREAM,0);
+    if(sd<0){
+        printf("\ncan't connect");
+    }
+    else{
+        printf("\nsocket is created");
+    }
+    struct sockaddr_in serveraddr;
+    serveraddr.sin_family=AF_INET;
+    serveraddr.sin_addr.s_addr=htonl(INADDR_ANY);
+    serveraddr.sin_port=htons(sport);
+    sd2=bind(sd,(struct sockaddr*)&serveraddr,sizeof(serveraddr));
+    if(sd2<0){
+        printf("\ncan't bind\n");    
+    }
+    else{
+        printf("\nBinded \n");
+    listen(sd,5);    
+    }
+    struct sockaddr_in cliaddr;
+    client=sizeof(cliaddr);
+    nsd=accept(sd,(struct sockaddr*)&cliaddr,&client);
+    if(sd2<0){
+        printf("\ncan't accept\n");
+    }
+    else{
+        printf("\nAccepted\n");
+    }   
+    return 0;    
+}
+
+
+
+//CLIENT
+
+#include<stdio.h>
+#include<string.h>
+#include<sys/socket.h>
+#include<netinet/in.h>
+#include<unistd.h>
+#include<arpa/inet.h> 
+int main(){
+    int csd,nsd,client,cport=6000;
+    csd=socket(AF_INET,SOCK_STREAM,0);
+    if(csd<0){
+        printf("can't create\n");
+    }
+    else{
+        printf("client's socket is created\n");
+    }
+    
+    struct sockaddr_in servaddr;
+    
+    servaddr.sin_family=AF_INET;
+    servaddr.sin_addr.s_addr=htonl(INADDR_ANY);
+    servaddr.sin_port=htons(cport);
+    
+    nsd=connect(csd,(struct sockaddr*)&servaddr,sizeof(servaddr));
+    
+    if(nsd<0){
+        printf("can't connect\n");
+    }
+    else{
+        printf("Connected\n");
+    }
+    close(csd);
+    
+    return 0; 
+}
