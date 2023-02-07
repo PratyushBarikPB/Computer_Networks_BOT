@@ -1,0 +1,95 @@
+//Pratyush Barik
+//Server Code------>
+
+#include<stdio.h>
+#include<sys/types.h>
+#include<netinet/in.h>
+#include<unistd.h>
+#include<arpa/inet.h>
+#include<string.h>
+
+int main(){
+	int sd,sd2,nsd,clilen,sport=6000,len,port;
+	sd = socket(AF_INET,SOCK_STREAM,0);
+	
+	if(sd<0)
+		printf("cant create\n");
+	else
+		printf("Socket is created\n");
+    
+  struct sockaddr_in  serveraddr;	
+	struct sockaddr_in  servaddr;
+	servaddr.sin_family = AF_INET;
+	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	servaddr.sin_port = htons(sport);
+	sd2 = bind(sd,(struct sockaddr*)&servaddr,sizeof(servaddr));
+	if(sd2<0)
+		printf("cant bind\n");
+	else
+		printf("Binded\n"); 
+    listen(sd,5);
+    struct sockaddr_in cliaddr;
+    clilen = sizeof(cliaddr);
+    nsd = accept(sd,(struct sockaddr*)&cliaddr,&clilen);
+    if(nsd<0)
+        printf("can't accept\n");
+    else
+        printf("accepted\n");
+    printf("client adress:%s",inet_ntoa(cliaddr.sin_addr));
+    printf("\n");
+    while(1){
+	    char rcvmsg[100];
+	    char sendmsg[100];
+	    recv(nsd,rcvmsg,20,0);
+	    printf("%s\n",rcvmsg);
+	    fgets(sendmsg,20,stdin);
+	    len=strlen(sendmsg);
+	    sendmsg[len-1]='\0';
+	    send(nsd,sendmsg,20,0);
+    }
+    close(sd);
+    close(nsd);
+    return 0;
+}
+
+//Client Code------>
+
+#include<stdio.h>
+#include<sys/socket.h>
+#include<netinet/in.h>
+#include<unistd.h>
+#include<arpa/inet.h>
+#include<string.h>
+int main(){
+    
+  int len;
+  int csd,nsd,clilen,cport=6000;
+  csd = socket(AF_INET,SOCK_STREAM,0);
+	
+	if(csd<0)
+		printf("cant create\n");
+	else
+		printf("Client's 'Socket is created\n");
+	struct sockaddr_in  servaddr;
+	servaddr.sin_family = AF_INET;
+	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	servaddr.sin_port = htons(cport);
+	nsd = connect(csd,(struct sockaddr*)&servaddr,sizeof(servaddr));
+	if(nsd<0)
+		printf("cant connect\n");
+	else
+		printf("connected\n"); 
+    while(1){
+        char revmsg[100];
+        char sendmsg[100];
+        fgets(sendmsg,20,stdin);
+        len=strlen(sendmsg);
+        sendmsg[len-1]='\0';
+        send(csd,sendmsg,20,0);
+        recv(csd,revmsg,20,0);
+        printf("%s\n",revmsg);
+    }
+    
+    close(csd);
+    return 0;
+}
