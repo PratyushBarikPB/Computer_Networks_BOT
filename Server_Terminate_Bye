@@ -1,0 +1,68 @@
+//SERVER CODE
+#include <stdio.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include<string.h>
+#include<time.h>
+int main(){
+    int sd,sd2,nsd,client,sport=6000,len;
+    char sendmsg[100],rcvmsg[100];
+    sd=socket(AF_INET,SOCK_STREAM,0);
+    time_t ticks;
+    if(sd<0){
+        printf("\ncan't connect");
+    }
+    else{
+        printf("\nsocket created");
+    }
+    struct sockaddr_in serveraddr;
+    serveraddr.sin_family=AF_INET;
+    serveraddr.sin_addr.s_addr=htonl(INADDR_ANY);
+    serveraddr.sin_port=htons(sport);
+    sd2=bind(sd,(struct sockaddr*)&serveraddr,sizeof(serveraddr));
+    if(sd2<0){
+        printf("\ncan't bind\n");    
+    }
+    else{
+        printf("\nBinded \n");
+    listen(sd,6);    
+    }
+    struct sockaddr_in cliaddr;
+    client=sizeof(cliaddr);
+    nsd=accept(sd,(struct sockaddr*)&cliaddr,&client);
+    if(sd2<0){
+        printf("\ncan't accept\n");
+    }
+    else{
+        printf("\nAccepted\n");
+    }
+    while(1){
+    char sendmsg[100];
+    char rcvmsg[100];
+    recv(nsd,rcvmsg,20,0);
+    printf("Message from client: %s \n",rcvmsg);
+    if(strcmp(rcvmsg,"bye")==0){
+        break;    
+    }
+    if(strcmp(rcvmsg,"send time")==0){
+        ticks=time(NULL);
+        strcpy(sendmsg,ctime(&ticks));    
+    }
+    else{
+        fgets(sendmsg,20,stdin);
+    }
+    len=strlen(sendmsg);
+    sendmsg[len-1]='\0';
+    send(nsd,sendmsg,20,0);
+    if(strcmp(sendmsg,"bye")==0){
+        break;
+    }
+    }
+    printf("ending chat\n");
+    close(sd);
+    close(nsd);    
+    return 0;    
+}
